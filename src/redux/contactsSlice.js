@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://652bc448d0d1df5273eeaf34.mockapi.io';
+axios.defaults.baseURL = `https://652c1f69d0d1df5273ef2b58.mockapi.io`;
 const initialState = {
   contacts: {
     items: [],
@@ -13,27 +13,31 @@ const initialState = {
 
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
   try {
-    const response = await axios.get(`https://652bc448d0d1df5273eeaf34.mockapi.io/contacts`);
+    const response = await axios.get(`/contacts`);
+    console.log(11);
     return response.data;
   } catch (error) {
+    console.log(1);
     throw error.response.data; 
   }
 });
 
 export const addContact = createAsyncThunk('contacts/addContact', async (newContact) => {
   try {
-    const response = await axios.post(`https://652bc448d0d1df5273eeaf34.mockapi.io/contacts`, newContact);
+    const response = await axios.post(`${axios.defaults.baseURL}/contacts`, newContact);
     return response.data;
   } catch (error) {
+    console.log(2);
     throw error.response.data; 
   }
 });
 
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId) => {
   try {
-    await axios.delete(`https://652bc448d0d1df5273eeaf34.mockapi.io/contacts/${contactId}`);
+    await axios.delete(`${axios.defaults.baseURL}/contacts/${contactId}`);
     return contactId;
   } catch (error) {
+    console.log(3);
     throw error.response.data; 
   }
 });
