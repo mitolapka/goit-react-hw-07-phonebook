@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react'; // You don't need to import React here
+import { useEffect } from 'react'; 
 import { fetchContacts } from '../redux/contactsSlice';
 import { selectContacts, selectFilter } from '../redux/selectors';
 import { ContactForm } from '../components/ContactForm';
