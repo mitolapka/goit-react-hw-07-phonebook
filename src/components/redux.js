@@ -1,25 +1,24 @@
+// redux.js
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   contacts: {
-    items: [],
+    items: [], 
     isLoading: false,
     error: null,
   },
   filter: '',
 };
 
-
-
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
     addContact: (state, action) => {
-      state.contacts.push(action.payload);
+      state.contacts.items.push(action.payload);
     },
     removeContact: (state, action) => {
-      state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
+      state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
     },
     setFilter: (state, action) => {
       state.filter = action.payload;
@@ -28,7 +27,7 @@ const contactsSlice = createSlice({
 });
 
 export const { addContact, removeContact, setFilter } = contactsSlice.actions;
-export const selectContacts = state => state.contacts.contacts;
+export const selectContacts = state => state.contacts.items; 
 export const selectFilter = state => state.contacts.filter;
 
 export default configureStore({
@@ -36,3 +35,4 @@ export default configureStore({
     contacts: contactsSlice.reducer,
   },
 });
+export { fetchContacts, deleteContact };

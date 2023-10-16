@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-axios.defaults.baseURL = `https://652c1f69d0d1df5273ef2b58.mockapi.io`;
+axios.defaults.baseURL = `https://652c1f69d0d1df5273ef2b58.mockapi.io/contacts`;
+
 const initialState = {
   contacts: {
     items: [],
@@ -13,32 +14,30 @@ const initialState = {
 
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
   try {
-    const response = await axios.get(`/contacts`);
-    console.log(11);
+    const response = await axios.get('/contacts');
     return response.data;
   } catch (error) {
-    console.log(1);
-    throw error.response.data; 
+    throw error.response.data;
   }
 });
 
+
+
 export const addContact = createAsyncThunk('contacts/addContact', async (newContact) => {
   try {
-    const response = await axios.post(`${axios.defaults.baseURL}/contacts`, newContact);
+    const response = await axios.post('/contacts', newContact);
     return response.data;
   } catch (error) {
-    console.log(2);
-    throw error.response.data; 
+    throw error.response.data;
   }
 });
 
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId) => {
   try {
-    await axios.delete(`${axios.defaults.baseURL}/contacts/${contactId}`);
+    await axios.delete(`/contacts/${contactId}`);
     return contactId;
   } catch (error) {
-    console.log(3);
-    throw error.response.data; 
+    throw error.response.data;
   }
 });
 
@@ -52,27 +51,18 @@ const contactsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchContacts.pending, (state) => {
-        state.contacts.isLoading = true;
-      })
       .addCase(fetchContacts.fulfilled, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.error = null;
-        state.contacts.items = action.payload;
+        state.contacts.items = action.payload; // Оновлення items
+        console.log('Оновлено дані контактів:', state.contacts.items); // Додайте цей рядок
+      })
+      .addCase(fetchContacts.pending, (state) => {
+        state.contacts.isLoading = true;
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.contacts.isLoading = false;
         state.contacts.error = action.error.message;
-      })
-      .addCase(addContact.fulfilled, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = null;
-        state.contacts.items.push(action.payload);
-      })
-      .addCase(deleteContact.fulfilled, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = null;
-        state.contacts.items = state.contacts.items.filter((contact) => contact.id !== action.payload);
       });
   },
 });
