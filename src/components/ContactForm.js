@@ -5,7 +5,7 @@ import { Label, Div, Button, DivName } from './MyForm.styled'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 export const ContactForm = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const validateName = value => {
         let errorMessage;
@@ -27,7 +27,6 @@ export const ContactForm = () => {
         return errorMessage;
     };
 
-
     const handleFormSubmit = (values, { resetForm }) => {
         const newContact = {
           name: values.name,
@@ -35,7 +34,7 @@ export const ContactForm = () => {
         };
         dispatch(addContact(newContact));
         resetForm();
-    }
+      }
 
     return (
         

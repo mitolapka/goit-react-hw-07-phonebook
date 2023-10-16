@@ -5,12 +5,13 @@ axios.defaults.baseURL = `https://652c1f69d0d1df5273ef2b58.mockapi.io/contacts`;
 
 const initialState = {
   contacts: {
-    items: [],
+    items: [], 
     isLoading: false,
     error: null,
   },
   filter: '',
 };
+
 
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
   try {
@@ -20,8 +21,6 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
     throw error.response.data;
   }
 });
-
-
 
 export const addContact = createAsyncThunk('contacts/addContact', async (newContact) => {
   try {
@@ -41,31 +40,39 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact', async (c
   }
 });
 
+
+
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
     setFilter: (state, action) => {
       state.filter = action.payload;
-    },
-  },
+    }},
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.fulfilled, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = null;
-        state.contacts.items = action.payload; // Оновлення items
-        console.log('Оновлено дані контактів:', state.contacts.items); // Додайте цей рядок
+        state.isLoading = false;
+        state.error = null;
+        state.items = action.payload;
       })
       .addCase(fetchContacts.pending, (state) => {
-        state.contacts.isLoading = true;
+        state.isLoading = true;
       })
       .addCase(fetchContacts.rejected, (state, action) => {
-        state.contacts.isLoading = false;
-        state.contacts.error = action.error.message;
-      });
+        state.isLoading = false;
+        state.error = action.error.message;
+      })
+      builder
+  .addCase(addContact.fulfilled, (state, action) => {
+    state.contacts.items.push(action.payload);
+  })
+  .addCase(deleteContact.fulfilled, (state, action) => {
+    state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
+  });
+
   },
 });
 
-export const { setFilter } = contactsSlice.actions;
 export default contactsSlice.reducer;
+export const { setFilter } = contactsSlice.actions;

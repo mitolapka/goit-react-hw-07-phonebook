@@ -13,10 +13,8 @@ export const App = () => {
   const filter = useSelector(selectFilter);
 
   useEffect(() => {
-    dispatch(fetchContacts()); // Dispatch the action to fetch contacts
-  }, []);
-  
-  console.log(contacts)
+    dispatch(fetchContacts()); 
+  }, [dispatch]);
 
   return (
     <div>
