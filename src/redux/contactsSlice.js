@@ -24,12 +24,18 @@ export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
 
 export const addContact = createAsyncThunk('contacts/addContact', async (newContact) => {
   try {
-    const response = await axios.post('/contacts', newContact);
+    const dataToSend = {
+      name: newContact.name,
+      phone: newContact.number,
+    };
+
+    const response = await axios.post('/contacts', dataToSend);
     return response.data;
   } catch (error) {
     throw error.response.data;
   }
 });
+
 
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId) => {
   try {
@@ -63,13 +69,14 @@ const contactsSlice = createSlice({
         state.isLoading = false;
         state.error = action.error.message;
       })
+      
       builder
-  .addCase(addContact.fulfilled, (state, action) => {
-    state.contacts.items.push(action.payload);
-  })
-  .addCase(deleteContact.fulfilled, (state, action) => {
-    state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
-  });
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.contacts.items.push(action.payload);
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
+      })
 
   },
 });

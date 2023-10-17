@@ -6,7 +6,7 @@ import { ContactItem } from '../components/ContactItem';
 
 export const ContactList = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts);
+  const contacts = useSelector(selectContacts);  
 
   useEffect(() => {
     dispatch(fetchContacts());

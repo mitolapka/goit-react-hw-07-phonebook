@@ -32,9 +32,11 @@ export const ContactForm = () => {
           name: values.name,
           number: values.number,
         };
-        dispatch(addContact(newContact));
-        resetForm();
-      }
+        dispatch(addContact(newContact))
+          .then(() => {
+            resetForm();
+          });
+    }
 
     return (
         
