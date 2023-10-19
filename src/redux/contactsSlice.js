@@ -5,13 +5,12 @@ axios.defaults.baseURL = `https://652c1f69d0d1df5273ef2b58.mockapi.io/contacts`;
 
 const initialState = {
   contacts: {
-    items: [], 
+    items: [],
     isLoading: false,
     error: null,
   },
   filter: '',
 };
-
 
 export const fetchContacts = createAsyncThunk('contacts/fetchAll', async () => {
   try {
@@ -36,7 +35,6 @@ export const addContact = createAsyncThunk('contacts/addContact', async (newCont
   }
 });
 
-
 export const deleteContact = createAsyncThunk('contacts/deleteContact', async (contactId) => {
   try {
     await axios.delete(`/contacts/${contactId}`);
@@ -46,38 +44,34 @@ export const deleteContact = createAsyncThunk('contacts/deleteContact', async (c
   }
 });
 
-
-
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
     setFilter: (state, action) => {
       state.filter = action.payload;
-    }},
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchContacts.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.error = null;
-        state.items = action.payload;
+        state.contacts.isLoading = false; // Зміна тут
+        state.contacts.error = null; // Зміна тут
+        state.contacts.items = action.payload; // Зміна тут
       })
       .addCase(fetchContacts.pending, (state) => {
-        state.isLoading = true;
+        state.contacts.isLoading = true; // Зміна тут
       })
       .addCase(fetchContacts.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.error.message;
+        state.contacts.isLoading = false; // Зміна тут
+        state.contacts.error = action.error.message; // Зміна тут
       })
-      
-      builder
       .addCase(addContact.fulfilled, (state, action) => {
-        state.contacts.items.push(action.payload);
+        state.contacts.items.push(action.payload); // Зміна тут
       })
       .addCase(deleteContact.fulfilled, (state, action) => {
-        state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
-      })
-
+        state.contacts.items = state.contacts.items.filter((contact) => contact.id !== action.payload); // Зміна тут
+      });
   },
 });
 
